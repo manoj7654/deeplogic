@@ -17,7 +17,7 @@ function makeRequest(url, callback) {
 }
 
 const server = http.createServer(async (req, res) => {
-  if (req.url === '/') {
+  if (req.url === '/getTimeStories') {
     try {
       makeRequest(url, (error, html) => {
         if (error) {
@@ -36,7 +36,7 @@ const server = http.createServer(async (req, res) => {
           const title = html.slice(titleStartIndex, titleEndIndex).trim();
           const linkStartIndex = html.lastIndexOf('<a href="', currentIndex);
           const linkEndIndex = html.indexOf('">', linkStartIndex);
-          const link = html.slice(linkStartIndex + '<a href="'.length, linkEndIndex);
+          const link = `https://time.com` + html.slice(linkStartIndex + '<a href="'.length, linkEndIndex);
 
           stories.push({ title, link });
           currentIndex = titleEndIndex;
