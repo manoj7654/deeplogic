@@ -24,9 +24,9 @@ function makeRequest(url, callback) {
 
 // Create an HTTP server
 const server = http.createServer(async (req, res) => {
-  if (req.url === '/') {
+  if (req.url === '/getTimeStories') {
     try {
-      // Make a GET request to the URL
+     
       makeRequest(url, (error, html) => {
         if (error) {
           console.error(`Failed to retrieve the webpage: ${error.message}`);
@@ -35,8 +35,8 @@ const server = http.createServer(async (req, res) => {
           return;
         }
 
-        // Updated HTML parsing for title and link
-        const stories = [];
+   
+        const result = [];
 
         const regex = /<li class="latest-stories__item">[\s\S]*?<a href="([^"]+)">[\s\S]*?<h3 class="latest-stories__item-headline">([^<]+)<\/h3>/g;
 
@@ -45,15 +45,14 @@ const server = http.createServer(async (req, res) => {
           const link =`https://time.com` +  match[1];
           const title = match[2].trim();
 
-          stories.push({
+          result.push({
             title,
             link,
           });
         }
 
-        // Respond with the extracted information as JSON
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(stories));
+        res.end(JSON.stringify(result));
       });
     } catch (error) {
       console.error(`Failed to retrieve the webpage: ${error.message}`);
